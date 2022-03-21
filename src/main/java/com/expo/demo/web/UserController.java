@@ -173,7 +173,7 @@ public class UserController {
         modelAndView.addObject("user", newUser);
         modelAndView.addObject("isAdmin", mUserHelper.isAdmin());
         modelAndView.addObject("isModerator", mUserHelper.isModerator());
-        modelAndView.addObject("title", "Գրանցել նոր օգտվող");
+        modelAndView.addObject("title", "New user");
         modelAndView.addObject("name", XUtils.getCurrentUserName(mUserHelper.getCurrentUser()));
         modelAndView.addObject("bindingMap", bindingMap);
         modelAndView.addObject("tab", tab.orElse(1L));
