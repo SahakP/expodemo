@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/main_layout}"
+      th:with="title=${title}, showNavBar=false, showSideBar=false">
+<body>
+<section layout:fragment="content">
+    <section class="section-tab">
+        <div class="custom-container">
+            <div class="row">
+                <div id="setting" class="col s12">
+                    <div class="">
+                        <div class="row table-question table-result">
+                            <div class="col s12">
+                                <div class="result-body" style="padding: 20px;">
+                                    <h5 class="center empty-text">This username and password were logged in from another computer, your session is over</h5>
+
+                                    <input onclick='window.history.back()' value='Դուրս գալ' type='button' class="back-btn center btn"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+</body>
+</html>

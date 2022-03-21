@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head lang="en" th:insert="inc/header :: header" th:with="title='Register'"></head>
+<body style="background-image:url(/static/img/bg_login.jpg);">
+<!--login section-->
+<section class=" register-section">
+    Register section
+    <section class="register">
+        <div class="container">
+            <main style="text-align: center;">
+                <div class="container">
+                    <div class="z-depth-1 grey lighten-4 row login-field">
+                        <h5 class="grey-text ">Register</h5>
+                        <form th:action="@{/register}"
+                              th:object="${user}" method="POST"
+                              class="col s12 custom-input datepicker-calendar-container">
+                            <div class='row'>
+                                <div class='col s12'></div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input class='validate' th:field="*{userInfo.firstName}"
+                                               type='text' name='name' id='name'/>
+                                        <label for='name'>Name</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input class='validate' th:field="*{userInfo.lastName}"
+                                               type='text' name='lastName' id='lastName'/>
+                                        <label for='lastName'>LastName</label>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='input-field col s12'>
+                                            <input th:field="*{userInfo.patternName}"
+                                                   type='text' name='patternName' id='patternName'/>
+                                            <label for='patternName'>patternName(optional)</label>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='input-field col s12'>
+                                            <input th:field="*{userInfo.email}" class='validate'
+                                                   type='email' name='email' id='email'/>
+                                            <label for='email'>email</label>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='input-field col s12'>
+                                            <input th:field="*{userInfo.phone}" class='validate'
+                                                   type='text' name='phone' id='phone'/>
+                                            <label for='phone'>phoneNumber</label>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class="input-field col s12">
+                                            <select th:field="*{selectedRoleName}">
+                                                <option th:if="${isAdmin}" value="ROLE_MODERATOR">Moderator</option>
+                                                <option value="ROLE_MEMBER">user</option>
+                                            </select>
+                                            <label>Select role</label>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='input-field col s12'>
+                                            <input th:field="*{username}" class='validate'
+                                                   type='text' name='username' id='username'/>
+                                            <label for='username'>username or email</label>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='input-field col s12'>
+                                            <input th:field="*{password}" class='validate'
+                                                   type='password' name='password' id='password'/>
+                                            <label for='password'>password</label>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='input-field col s12'>
+                                            <input th:field="*{passwordConfirm}" class='validate'
+                                                   type='password' name='confirmPassword'
+                                                   id='confirmPassword'/>
+                                            <label for='confirmPassword'>Confirm password</label>
+                                        </div>
+                                    </div>
+                                    <a th:href="@{/login}"
+                                       class="waves-effect waves-light btn red">Cancel <i
+                                            class="material-icons">cancel</i></a>
+                                    <button type="submit"
+                                            class="waves-effect waves-light btn custom-grey">
+                                        save <i class="material-icons">save</i>
+                                    </button>
+
+                                    <div class="mb-50"></div>
+                                    <h5 th:if="${errors != null}" class="red-text " th:text="${errors}"></h5>
+
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </section>
+</section>
+<!--login section end-->
+<div th:insert="~{inc/footer :: footer}"></div>
+</body>
+</html>

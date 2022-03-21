@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head lang="en" th:insert="inc/header :: header" th:with="title=${title}">
+</head>
+
+<body>
+<div th:if="${showSideBar}" th:insert="inc/sidenav :: sidenav"></div>
+
+<div id="main" class="marginMain">
+    <nav th:if="${showNavBar}" th:insert="inc/navbar :: navbar" th:with="title=${title}, name=${name}, memberName=${memberName}"></nav>
+
+
+    <section layout:fragment="content"></section>
+
+    <div th:insert="~{inc/footer :: footer}"></div>
+
+</div>
+</body>
+</html>

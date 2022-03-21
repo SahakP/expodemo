@@ -1,0 +1,3 @@
+/*INSERT INTO kadastre.role (id, name)
+VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_COMMISSIONER'), (3, 'ROLE_MEMBER')
+ON CONFLICT (id) DO NOTHING ;*/

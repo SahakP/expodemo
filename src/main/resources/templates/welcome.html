@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/main_layout}"
+      th:with="title='Welcome', showNavBar=true, showSideBar=false">
+<body>
+<section layout:fragment="content">
+    <section class="section-tab">
+        <div class="custom-container">
+            <div class="row">
+
+                <h3>Welcome</h3>
+                <h3 colspan="3" th:text="${name}"></h3>
+
+            </div>
+        </div>
+    </section>
+</section>
+</body>
+</html>

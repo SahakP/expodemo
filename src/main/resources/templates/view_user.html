@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/main_layout}"
+      th:with="title=${title}, showNavBar=true, showSideBar=false">
+<body>
+<section layout:fragment="content">
+    <div class="custom-container">
+        <div class="row">
+            <div class="col s12 tab-background user-bio">
+                <form th:object="${user}" class="col s12 custom-input">
+                    <div class='row'>
+                        <div class='col s12'>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            <input th:readonly="true" class='validate' th:field="*{userInfo.firstName}"
+                                   type='text' name='name' id='name'/>
+                            <label for='name'>Name</label>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            <input th:readonly="true" class='validate' th:field="*{userInfo.lastName}"
+                                   type='text' name='lastName' id='lastName'/>
+                            <label for='lastName'>Last name</label>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            <input th:readonly="true" class='validate' th:field="*{userInfo.patternName}"
+                                   type='text' name='patternName' id='patternName'/>
+                            <label for='patternName'>Pattern name</label>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            <input th:readonly="true" class='validate' th:field="*{userInfo.passport}"
+                                   type='text' name='passport' id='passport'/>
+                            <label for='passport'>Passport</label>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            <input th:readonly="true" th:field="*{userInfo.email}"
+                                   type='email' name='email' id='email'/>
+                            <label for='email'>Email</label>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            <input th:readonly="true" th:field="*{userInfo.phone}"
+                                   type='number' name='phone' id='phone'/>
+                            <label for='phone'>Phone</label>
+                        </div>
+                    </div>
+                    <div class='row'>
+                        <div class='input-field col s12'>
+                            <input th:readonly="true" th:field="*{username}"
+                                   type='text' name='username' id='username'/>
+                            <label for='username'>Username</label>
+                        </div>
+                    </div>
+
+                    <div class="right">
+                        <a th:href="@{/admin/users}"
+                           class="waves-effect waves-light btn red">User</a>
+                    </div>
+                    <div class="mb-50"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

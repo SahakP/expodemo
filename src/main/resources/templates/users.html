@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/main_layout}"
+      th:with="title='Users', showNavBar=true, showSideBar=false">
+<li><a th:href="@{/admin/users}"><img th:src="@{/img/kadastr.png}" class="responsive-img" alt=""></a></li>
+<body>
+<section layout:fragment="content">
+    <section class="section-tab">
+        <div class="custom-container">
+            <div class="row">
+                <div class="col s12 no-padding">
+                    <ul class="tabs">
+                        <li th:onclick="'clickTab(\'' + '#admin' +'\');'" th:if="${isAdmin}" class="tab col s4"><a href="#admin" th:class="${tab==1} ? active">Admins</a></li>
+                        <li th:onclick="'clickTab(\'' + '#moderator' +'\');'" th:if="${isAdmin}" class="tab col s4"><a href="#moderator" th:class="${tab==2} ? active">Moderators</a></li>
+                        <li th:onclick="'clickTab(\'' + '#member' +'\');'" th:if="${isAdmin}" class="tab col s4"><a href="#member" th:class="${tab==3} ? active">Users</a></li>
+                        <li th:onclick="'clickTab(\'' + '#member' +'\');'"  th:class="${isModerator ? 'tab col s4' : 'tab col s12'}"><a href="#member" th:class="${tab==3} ? active">Users</a></li>
+                    </ul>
+                </div>
+                <div  th:if="${isAdmin}" id="admin" class="col s12 tab-background">
+                    <table th:if="${userAdminPage.content.size() > 0}">
+                        <thead>
+                        <tr>
+                            <th>Name LastName PatternName</th>
+                            <th colspan="3" th:if="${isEditRole}">Tools</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="userAdmin : ${userAdminPage}">
+                            <td th:text="${userAdmin.userInfo.getFirstName()} + ' ' + ${userAdmin.userInfo.getLastName()} + ' '+ ${userAdmin.userInfo.getPatternName()}"></td>
+                            <td>
+                                <a th:href="@{/admin/viewUser(userId = ${userAdmin.getId()})}" class="waves-effect waves-light btn blue">View <i class="material-icons">remove_red_eye</i></a>
+                            </td>
+                            <td th:if="${isEditRole}">
+                                <a th:href="@{/adminr/editUser(userId = ${userAdmin.getId()}, tab = 1)}" class="waves-effect waves-light btn blue">Edit <i class="material-icons">edit</i></a>
+                            </td>
+                            <td th:if="${isEditRole}">
+                                <form th:action="@{/admin/deleteUser(tab = 1, userId = ${userAdmin.getId()})}" th:method="POST">
+                                    <button type="submit" class="waves-effect waves-light btn red">Delete <i class="material-icons">delete</i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination-newUser">
+                        <ul class="pagination" th:fragment="pagination">
+                            <li th:if="${pageNumbersAdmin != null && pageNumbersAdmin.size() > 1}" class="waves-effect">
+                                <a th:href="@{/admin/users(tab = 1, pageAdmin=${currentPageAdmin - 1})}">Back</a>
+                            </li>
+                            <li th:each="pageNumber : ${pageNumbersAdmin}"
+                                th:class="${pageNumber==currentPageAdmin} ? active" class="waves-effect"
+                                th:if="${pageNumbersAdmin != null && pageNumbersAdmin.size() > 1 && (pageNumber == 1 || pageNumber == pageNumbersAdmin.size()
+                                || pageNumber == currentPageAdmin || pageNumber == currentPageAdmin - 1 || pageNumber == currentPageAdmin + 1)}">
+                                <a th:text="${pageNumber}"
+                                   th:href="@{/admin/users(tab = 1, pageAdmin=${pageNumber})}"></a>
+                            </li>
+                            <li th:if="${pageNumbersAdmin != null && pageNumbersAdmin.size() > 1}" class="waves-effect">
+                                <a th:href="@{/admin/users(tab = 1, pageAdmin=${currentPageAdmin + 1 > pageNumbersAdmin.size() ? pageNumbersAdmin.size() : currentPageAdmin + 1})}">Next</a>
+                            </li>
+
+                            <form th:if="${pageNumbersAdmin != null && pageNumbersAdmin.size() > 1}"
+                                  th:object="${bindingMap}"
+                                  th:action="@{/adminr/users}" method="post">
+                                <input th:field="*{pageAdmin}" type="number" th:max="${pageNumbersAdmin.size()}" th:min="1">
+                                <input th:field="*{tab}" type="hidden" th:value="1" value="1">
+                                <button type="submit"
+                                        class="waves-effect waves-light btn custom-grey">Forward
+                                </button>
+                            </form>
+
+                        </ul>
+                        <a th:if="${isEditRole}" th:href="@{/admin/register(regAdmin = 1, tab = 1)}" class="waves-effect waves-light btn custom-grey">Register a new user<i class="material-icons">group_add</i></a>
+
+                    </div>
+                </div>
+
+                <div  th:if="${isAdmin}" id="moderator" class="col s12 tab-background">
+                    <table th:if="${userModeratorPage.content.size() > 0}">
+                        <thead>
+                        <tr>
+                            <th>Name LastName PatternName</th>
+                            <th colspan="3" th:if="${isEditRole}">Tools</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="userModerator : ${userModeratorPage}">
+                            <td th:text="${userModerator.userInfo.getFirstName()} + ' ' + ${userModerator.userInfo.getLastName()} + ' '+ ${userModerator.userInfo.getPatternName()}"></td>
+                            <td>
+                                <a th:href="@{/admin/viewUser(userId = ${userModerator.getId()})}" class="waves-effect waves-light btn blue">View <i class="material-icons">remove_red_eye</i></a>
+                            </td>
+                            <td th:if="${isEditRole}">
+                                <a th:href="@{/admin/editUser(userId = ${userModerator.getId()}, tab = 1)}" class="waves-effect waves-light btn blue">Edit <i class="material-icons">edit</i></a>
+                            </td>
+                            <td th:if="${isEditRole}">
+                                <form th:action="@{/admin/deleteUser(tab = 1, userId = ${userModerator.getId()})}" th:method="POST">
+                                    <button type="submit" class="waves-effect waves-light btn red">Delete <i class="material-icons">delete</i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination-newUser">
+                        <ul class="pagination" th:fragment="pagination">
+                            <li th:if="${pageNumbersModerator != null && pageNumbersModerator.size() > 1}" class="waves-effect">
+                                <a th:href="@{/admin/users(tab = 1, pageModerator=${currentPageModerator - 1})}">Back</a>
+                            </li>
+                            <li th:each="pageNumber : ${pageNumbersModerator}"
+                                th:class="${pageNumber==currentPageModerator} ? active" class="waves-effect"
+                                th:if="${pageNumbersModerator != null && pageNumbersModerator.size() > 1 && (pageNumber == 1 || pageNumber == pageNumbersModerator.size()
+                                || pageNumber == currentPageModerator || pageNumber == currentPageModerator - 1 || pageNumber == currentPageModerator + 1)}">
+                                <a th:text="${pageNumber}"
+                                   th:href="@{/admin/users(tab = 1, pageModerator=${pageNumber})}"></a>
+                            </li>
+                            <li th:if="${pageNumbersModerator != null && pageNumbersModerator.size() > 1}" class="waves-effect">
+                                <a th:href="@{/admin/users(tab = 1, pageModerator=${currentPageModerator + 1 > pageNumbersModerator.size() ? pageNumbersModerator.size() : currentPageModerator + 1})}">Next</a>
+                            </li>
+
+                            <form th:if="${pageNumbersModerator != null && pageNumbersModerator.size() > 1}"
+                                  th:object="${bindingMap}"
+                                  th:action="@{/admin/users}" method="post">
+                                <input th:field="*{pageModerator}" type="number" th:max="${pageNumbersModerator.size()}" th:min="1">
+                                <input th:field="*{tab}" type="hidden" th:value="1" value="1">
+                                <button type="submit"
+                                        class="waves-effect waves-light btn custom-grey">Forward
+                                </button>
+                            </form>
+
+                        </ul>
+                        <a th:if="${isEditRole}" th:href="@{/admin/register(regAdmin = 1, tab = 1)}" class="waves-effect waves-light btn custom-grey">Register a new user <i class="material-icons">group_add</i></a>
+
+                    </div>
+                </div>
+
+                <div id="member" class="col s12 tab-background">
+                    <table th:if="${userMemberPage.content.size() > 0}">
+                        <thead>
+                        <tr>
+                            <th>Name LastName PatternName</th>
+                            <th colspan="3" th:if="${isEditRole}">Tools</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr th:each="userMember : ${userMemberPage}">
+                            <td th:text="${userMember.userInfo.getFirstName()} + ' ' + ${userMember.userInfo.getLastName()} + ' ' + ${userMember.userInfo.getPatternName()}"></td>
+                            <td>
+                                <a th:href="@{/admin/viewUser(userId = ${userMember.getId()})}" class="waves-effect waves-light btn blue">View<i class="material-icons">remove_red_eye</i></a>
+                            </td>
+                            <td th:if="${isEditRole}">
+                                <a th:href="@{/admin/editUser(userId = ${userMember.getId()}, tab = 3)}" class="waves-effect waves-light btn blue">Edit<i class="material-icons">edit</i></a>
+                            </td>
+                            <td th:if="${isEditRole}">
+                                <form th:action="@{/admin/deleteUser(tab = 3, userId = ${userMember.getId()})}" th:method="POST">
+                                    <button type="submit" class="waves-effect waves-light btn red">Delete <i class="material-icons">delete</i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination-newUser">
+                        <ul class="pagination" th:fragment="pagination">
+
+                            <li th:if="${pageNumbersMember != null && pageNumbersMember.size() > 1}" class="waves-effect">
+                                <a th:href="@{/admin/users(tab = 3, pageMember=${currentPageMember - 1})}">Նախորդ</a>
+                            </li>
+                            <li th:each="pageNumber : ${pageNumbersMember}"
+                                th:class="${pageNumber==currentPageMember} ? active" class="waves-effect"
+                                th:if="${pageNumbersMember != null && pageNumbersMember.size() > 1 && (pageNumber == 1 || pageNumber == pageNumbersMember.size()
+                                || pageNumber == currentPageMember || pageNumber == currentPageMember - 1 || pageNumber == currentPageMember + 1)}">
+                                <a th:text="${pageNumber}" th:href="@{/admin/users(tab=3, pageMember=${pageNumber})}"></a>
+                            </li>
+                            <li th:if="${pageNumbersMember != null && pageNumbersMember.size() > 1}" class="waves-effect">
+                                <a th:href="@{/admin/users(tab = 3, pageMember=${currentPageMember + 1 > pageNumbersMember.size() ? pageNumbersMember.size() : currentPageMember + 1})}">Next</a>
+                            </li>
+                            <form th:if="${pageNumbersMember != null && pageNumbersMember.size() > 1}"
+                                  th:object="${bindingMap}"
+                                  th:action="@{/admin/users}" method="post">
+                                <input th:field="*{pageMember}" type="number" th:max="${pageNumbersMember.size()}" th:min="1">
+                                <input th:field="*{tab}" type="hidden" th:value="3" value="3">
+                                <button type="submit"
+                                        class="waves-effect waves-light btn custom-grey">Forward
+                                </button>
+                            </form>
+
+                        </ul>
+                        <a th:if="${isEditRole}" th:href="@{/admin/register(regAdmin = 1, tab = 1)}" class="waves-effect waves-light btn custom-grey">Register a new user <i class="material-icons">group_add</i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+</body>
+</html>

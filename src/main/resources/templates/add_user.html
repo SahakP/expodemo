@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/main_layout}"
+      th:with="title=${title}, showNavBar=true, showSideBar=false">
+<body>
+<section layout:fragment="content" class="section-tab">
+            <main class="adduser">
+                <div class="custom-container">
+                    <div class="row">
+                        <div class="col s12 tab-background user-bio">
+
+                            <form action="#" th:action="@{/admin/register(userId = ${userId}, tab = ${tab})}"
+                                  th:object="${user}"
+                                  class="col s12 custom-input" th:method="POST">
+                                <div class='row'>
+                                    <div class='col s12'>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input class='validate' th:field="*{userInfo.firstName}"
+                                               type='text' name='name' id='name'/>
+                                        <label for='name'>Name</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input class='validate' th:field="*{userInfo.lastName}"
+                                               type='text' name='lastName' id='lastName'/>
+                                        <label for='lastName'>Last name</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input th:field="*{userInfo.patternName}"
+                                               type='text' name='patternName' id='patternName'/>
+                                        <label for='patternName'>Pattern name</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input th:field="*{userInfo.passport}"
+                                               type='text' name='passport' id='passport'/>
+                                        <label for='passport'>Passport(dispensable)</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input th:field="*{userInfo.email}" class='validate'
+                                               type='email' name='email' id='email'/>
+                                        <label for='email'>Email (dispensable)</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input th:field="*{userInfo.phone}" class='validate'
+                                               type='number' name='phone' id='phone'/>
+                                        <label for='phone'>Phone (dispensable)</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class="input-field col s12">
+                                        <select th:field="*{selectedRoleName}">
+                                            <option th:if="${isAdmin}" value="ROLE_ADMIN">Admin</option>
+                                            <option th:if="${isAdmin}" value="ROLE_MODERATOR">Moderator</option>
+                                            <option value="ROLE_MEMBER">Member</option>
+                                        </select>
+                                        <label>Select role</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input th:field="*{username}" class='validate'
+                                               type='text' name='username' id='username'/>
+                                        <label for='username'>Username</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input th:field="*{password}" class='validate'
+                                               type='password' name='password' id='password'/>
+                                        <label for='password'>Password</label>
+                                    </div>
+                                </div>
+                                <div class='row'>
+                                    <div class='input-field col s12'>
+                                        <input th:field="*{passwordConfirm}" class='validate'
+                                               type='password' name='confirmPassword'
+                                               id='confirmPassword'/>
+                                        <label for='confirmPassword'>Confirm password</label>
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="right form-button">
+                               <a th:href="@{/admin/users}"
+                                       class="waves-effect waves-light btn red">Cancel <i class="material-icons">cancel</i></a>
+                                    <button type="submit"
+                                            class="waves-effect waves-light btn custom-grey">
+                                        Save <i class="material-icons">save</i>
+                                    </button>
+                                </div>
+                                <div class="mb-50"></div>
+                            </form>
+
+                            <ul>
+                                <li style="background-color: #262c2e" th:if="${errors != null}" class="red-text"
+                                    th:each="error : ${errors}" th:text="${errors}"></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+</section>
+</body>
+</html>
