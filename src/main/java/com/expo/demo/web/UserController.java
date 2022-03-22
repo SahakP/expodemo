@@ -36,7 +36,7 @@ import java.util.stream.IntStream;
 
 @Controller
 public class UserController {
-    //ToDo: Remove word commissioner from: url, method names
+
     @Autowired
     private UserService mUserService;
 
@@ -145,7 +145,6 @@ public class UserController {
     }
 
 
-    // @Secured({Diciton.ROLE_ADMIN,})
     @RequestMapping(value = {"/register"}, method = RequestMethod.GET)
     public ModelAndView register(@RequestParam("regAdmin") Optional<Long> regAdmin,
                                  @RequestParam("regMember") Optional<Long> regMember,
@@ -184,29 +183,11 @@ public class UserController {
     }
 
 
-
     @RequestMapping(value = {"/register"}, method = RequestMethod.POST)
     public ModelAndView register(@Valid @ModelAttribute("user") User user,
                                  BindingResult bindingResult, Model model) {
 
-        /*
-        *
-        * @Valid @ModelAttribute("user") User user,
-                                 BindingResult bindingResult, Model model,
-                                 @RequestParam("userId") Optional<Long> userId,
-                                 @RequestParam("tab") Optional<Long> tab
-        *
-        * */
 
-        //System.out.println("Hello from register");
-
-        /*if (userId.isPresent() &&
-                (user.getPassword() == null || user.getPassword().isEmpty())
-                && (user.getPasswordConfirm() == null || user.getPasswordConfirm().isEmpty())) {
-            user.setNotValidatePassword(true);
-        }*/
-
-        //userId.ifPresent(user::setId);
         mUserValidator.validate(user, bindingResult);
         ArrayList<String> errorMsgs = new ArrayList<>();
 
@@ -254,7 +235,6 @@ public class UserController {
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("user", user);
             modelAndView.addObject("errors", errorMsgs);
-            //userId.ifPresent(aLong -> modelAndView.addObject("userId", aLong));
             modelAndView.addObject("isAdmin", mUserHelper.isAdmin());
             modelAndView.addObject("isAdmin", mUserHelper.isModerator());
             modelAndView.addObject("title", "User editing");
@@ -263,24 +243,7 @@ public class UserController {
             return modelAndView;
         }
 
-       /* if (userId.isPresent()) {
-            Optional<User> userOptional = mUserService.findUserById(userId.get());
-            if (userOptional.isPresent()) {
-                User userDB = userOptional.get();
 
-                user.setId(userDB.getId());
-                user.getUserInfo().setId(userDB.getUserInfo().getId());
-                user.setLastLogin(userDB.getLastLogin());
-                user.setUpdatedAt(new Date());
-                user.setCreatedAt(userDB.getCreatedAt());
-
-                if (user.getNotValidatePassword() != null && user.getNotValidatePassword()) {
-                    user.setPassword(userDB.getPassword());
-                }
-
-            }
-        }
-*/
         Role role = mUserService.findRoleByName(user.getSelectedRoleName());
         if (role == null) {
             errorMsgs.add("User role not selected, or wrong role selected");
@@ -333,12 +296,12 @@ public class UserController {
     @RequestMapping(value = {"/admin/viewUser"}, method = RequestMethod.GET)
     public ModelAndView viewUser(@RequestParam("userId") Optional<Long> userId) {
         if (!userId.isPresent()) {
-            return MainController.getErrorPage("Օգտվողի ID-ն բացակայում է");
+            return MainController.getErrorPage("User ID is missing");
         }
 
         Optional<User> userOpt = mUserService.findUserById(userId.get());
         if (!userOpt.isPresent()) {
-            return MainController.getErrorPage("Նշված ID-ով օգտվող գոյություն չունի");
+            return MainController.getErrorPage("There is no user with the specified ID");
         }
 
         User user = userOpt.get();
@@ -347,7 +310,7 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("user", user);
         modelAndView.addObject("userId", userId.get());
-        modelAndView.addObject("title", "Օգտվողի մանրամասներ");
+        modelAndView.addObject("title", "User details");
         modelAndView.addObject("name", XUtils.getCurrentUserName(mUserHelper.getCurrentUser()));
 
 
@@ -362,12 +325,12 @@ public class UserController {
     public ModelAndView editUser(@RequestParam("userId") Optional<Long> userId,
                                  @RequestParam("tab") Optional<Long> tab) {
         if (!userId.isPresent()) {
-            return MainController.getErrorPage("Օգտվողի ID-ն բացակայում է");
+            return MainController.getErrorPage("User ID is missing");
         }
 
         Optional<User> userOpt = mUserService.findUserById(userId.get());
         if (!userOpt.isPresent()) {
-            return MainController.getErrorPage("Նշված ID-ով օգտվող գոյություն չունի");
+            return MainController.getErrorPage("There is no user with the specified ID");
         }
 
         User user = userOpt.get();
@@ -381,7 +344,7 @@ public class UserController {
         modelAndView.addObject("isMember", mUserHelper.isMember());
         modelAndView.addObject("userId", userId.get());
         modelAndView.addObject("isAdmin", mUserHelper.isAdmin());
-        modelAndView.addObject("title", "Օգտվողի խմբագրում");
+        modelAndView.addObject("title", "User edit");
         modelAndView.addObject("name", XUtils.getCurrentUserName(mUserHelper.getCurrentUser()));
         modelAndView.addObject("tab", tab.orElse(1L));
 
@@ -397,12 +360,12 @@ public class UserController {
     public ModelAndView deleteUser(@RequestParam("userId") Optional<Long> userId,
                                    @RequestParam("tab") Optional<Integer> tab) {
         if (!userId.isPresent()) {
-            return MainController.getErrorPage("Օգտվողի ID-ն բացակայում է");
+            return MainController.getErrorPage("User ID is missing");
         }
 
         Optional<User> user = mUserService.findUserById(userId.get());
         if (!user.isPresent()) {
-            return MainController.getErrorPage("Նշված ID-ով օգտվող գոյություն չունի");
+            return MainController.getErrorPage("There is no user with the specified ID");
         }
 
         mUserService.deleteUser(user.get());
@@ -442,7 +405,7 @@ public class UserController {
 
         modelAndView.addObject("user", newUser);
         modelAndView.addObject("isAdmin", mUserHelper.isAdmin());
-        modelAndView.addObject("title", "Գրանցել նոր օգտվող");
+        modelAndView.addObject("title", "Add new user");
         modelAndView.addObject("name", XUtils.getCurrentUserName(mUserHelper.getCurrentUser()));
         modelAndView.addObject("tab", tab.orElse(1L));
 
@@ -496,16 +459,16 @@ public class UserController {
                 }
             }
             if (isNotEmptyError) {
-                errorMsgs.add("Խնդրում ենք լրացնել բոլոր պարտադիր դաշտերը");
+                errorMsgs.add("Please fill in all required fields");
             }
             if (isUsernameAlsoSet) {
-                errorMsgs.add("Տվյալ օգտվողի անունը արդեն զբաղված է");
+                errorMsgs.add("This username is already busy");
             }
             if (isPasswordLengthError) {
-                errorMsgs.add("Գաղտնաբառի երկարությունը պետք է լինի 8 և 32 սիմվոլների մեջ");
+                errorMsgs.add("Password must be 8 and 32 characters long");
             }
             if (isPasswordNotSame) {
-                errorMsgs.add("Գաղտնաբառերը չեն համընկնում");
+                errorMsgs.add("Passwords do not match");
             }
 
 
@@ -514,7 +477,7 @@ public class UserController {
             modelAndView.addObject("errors", errorMsgs);
             userId.ifPresent(aLong -> modelAndView.addObject("userId", aLong));
             modelAndView.addObject("isAdmin", mUserHelper.isAdmin());
-            modelAndView.addObject("title", "Օգտվողի խմբագրում");
+            modelAndView.addObject("title", "User edit");
             modelAndView.addObject("name", XUtils.getCurrentUserName(mUserHelper.getCurrentUser()));
             modelAndView.addObject("tab", tab.orElse(1L));
             modelAndView.setViewName("add_user");
@@ -541,11 +504,11 @@ public class UserController {
 
         Role role = mUserService.findRoleByName(user.getSelectedRoleName());
         if (role == null) {
-            errorMsgs.add("Օգտվողի դերը ընտրված չէ, կամ ընտրված է սխալ դեր");
+            errorMsgs.add("User role not selected, or wrong role selected");
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("user", user);
             modelAndView.addObject("errors", errorMsgs);
-            modelAndView.addObject("title", "Օգտվողի խմբագրում");
+            modelAndView.addObject("title", "User edit");
             modelAndView.addObject("name", XUtils.getCurrentUserName(mUserHelper.getCurrentUser()));
 
             modelAndView.setViewName("add_user");
@@ -621,7 +584,7 @@ public class UserController {
                 }
             }
             if (isNotEmptyError) {
-                errorMsgs.add("Խնդրում ենք լրացնել բոլոր պարտադիր դաշտերը");
+                errorMsgs.add("Please fill in all required fields");
             }
             ModelAndView modelAndView = new ModelAndView();
             modelAndView.addObject("user", user);
@@ -686,14 +649,6 @@ public class UserController {
 
         userId.ifPresent(user::setId);
         mUserPasswordValidator.validate(user, bindingResult);
-       /* boolean isOldPasswordNotSame = bCryptPasswordEncoder.matches(user.getOldPassword(),user.getPassword());
-
-        if(isOldPasswordNotSame == false){
-            List<ObjectError> errors = bindingResult.getAllErrors();
-            errors.errorMsgs.add("Գաղտնաբառերը չեն համընկնում");
-        }*/
-
-        //user.setOldPassword()(bCryptPasswordEncoder.encode(user.getOldPassword()));
 
         boolean isPasswordRight = false;
         if (userId.isPresent()) {
@@ -702,7 +657,7 @@ public class UserController {
             String oldPassEncoded = userdb.getPassword();
             if (user.getOldPassword() != null) {
                 String enteredPassword = bCryptPasswordEncoder.encode(user.getOldPassword());
-                isPasswordRight = bCryptPasswordEncoder.matches(user.getOldPassword(),userdb.getPassword());
+                isPasswordRight = bCryptPasswordEncoder.matches(user.getOldPassword(), userdb.getPassword());
             }
         }
         ArrayList<String> errorMsgs = new ArrayList<>();
@@ -714,7 +669,6 @@ public class UserController {
             boolean isPasswordLengthError = false;
             boolean isPasswordNotSame = false;
             boolean isPasswordSame = false;
-           // boolean isOldPasswordNotSame = false;
 
             for (ObjectError objectError : errors) {
                 if (objectError == null || objectError.getCode() == null) {
@@ -744,22 +698,22 @@ public class UserController {
 
             }
             if (isNotEmptyError) {
-                errorMsgs.add("Խնդրում ենք լրացնել բոլոր պարտադիր դաշտերը");
+                errorMsgs.add("Please fill in all required fields");
             }
             if (isUsernameAlsoSet) {
-                errorMsgs.add("Տվյալ օգտվողի անունը արդեն զբաղված է");
+                errorMsgs.add("This username is already busy");
             }
             if (isPasswordLengthError) {
-                errorMsgs.add("Գաղտնաբառի երկարությունը պետք է լինի 8 և 32 սիմվոլների մեջ");
+                errorMsgs.add("Password must be 8 and 32 characters long");
             }
             if (isPasswordNotSame) {
-                errorMsgs.add("Գաղտնաբառերը չեն համընկնում");
+                errorMsgs.add("Passwords do not match");
             }
             if (isPasswordSame) {
-                errorMsgs.add("Գաղտնաբառերը համընկնում են");
+                errorMsgs.add("Passwords match");
             }
             if (!isPasswordRight) {
-                errorMsgs.add("Մուտքագրված հին գաղտնաբառը սխալ է");
+                errorMsgs.add("The old password you entered is incorrect");
             }
 
             ModelAndView modelAndView = new ModelAndView();
@@ -780,7 +734,6 @@ public class UserController {
                 userDB.setUpdatedAt(new Date());
                 userDB.setUsername(user.getUsername());
                 userDB.setPassword(user.getNewPassword());
-                //userDB.setNotValidatePassword(null);
                 mUserService.save(userDB);
             }
         }
