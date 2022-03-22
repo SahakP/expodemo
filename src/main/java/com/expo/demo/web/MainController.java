@@ -9,9 +9,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.expo.demo.util.XUrlAuthenticationSuccessHandler;
 
-/**
- * Created by Garik on 31-May-19, 19:13
- */
 
 @Controller
 class MainController {
@@ -36,14 +33,6 @@ class MainController {
         modelAndView.setViewName("access_denied");
         return modelAndView;
     }
-/*
-    static ModelAndView getSuccessPage(String message) {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.addObject("message", message);
-        modelAndView.addObject("title", message);
-        modelAndView.setViewName("success_message");
-        return modelAndView;
-    }*/
 
     static ModelAndView getErrorPage(String message) {
         ModelAndView modelAndView = new ModelAndView();

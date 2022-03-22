@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Diciton {
-    //ToDo: change kadastre to expo
+
     public static final String SCHEMA = "expo";
 
     public static final String TABLE_USER = "user";

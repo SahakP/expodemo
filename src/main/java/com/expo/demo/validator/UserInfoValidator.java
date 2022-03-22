@@ -8,10 +8,7 @@ import org.springframework.validation.Validator;
 
 @Component
 public class UserInfoValidator implements Validator {
-/*
-    @Autowired
-    private UserService userService;
-*/
+
 
     @Override
     public boolean supports(Class<?> aClass) {

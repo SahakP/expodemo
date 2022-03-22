@@ -2,9 +2,6 @@ package com.expo.demo.model.util;
 
 
 
-/**
- * Created by Garik on 23-May-19, 16:09
- */
 
 public class BindingMap {
     private Long id;

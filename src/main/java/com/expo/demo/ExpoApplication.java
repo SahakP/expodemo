@@ -37,22 +37,7 @@ public class ExpoApplication implements CommandLineRunner {
     public void run(String... args) {
         //Important. This code initializes system, do not remove
         mUserService.createRoles();
-       /* mUserHelper.createQuizStatuses();
-        mUserHelper.createQuizMemberStatuses();
-        //mUserHelper.createMainQuizCategories();
-        mUserHelper.setOrdersForAnswers();
-        mUserHelper.setReportTitles();
 
-        mUserHelper.updateQuizesForPracticalTest();
-
-        //remove this line after one use
-        mUserHelper.updateQuizCategories();
-
-        //add created date and updated date in existing items
-
-
-        //add type to questions
-        mUserHelper.updateQuestions();*/
 
         List<User> admins = mUserService.findAllAdmins();
         if (admins.isEmpty()) {
